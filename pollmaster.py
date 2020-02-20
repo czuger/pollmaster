@@ -5,7 +5,7 @@ import traceback
 import aiohttp
 import discord
 import logging
-
+import datetime
 
 from essentials.messagecache import MessageCache
 from discord.ext import commands
@@ -13,6 +13,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from essentials.multi_server import get_pre
 from essentials.settings import SETTINGS
+
+print(f'Started at {datetime.datetime.now()}', flush=True)
 
 bot_config = {
     'command_prefix': get_pre,
@@ -60,7 +62,7 @@ async def on_ready():
     mongo = AsyncIOMotorClient(SETTINGS.mongo_db)
     bot.db = mongo.pollmaster
     bot.session = aiohttp.ClientSession()
-    print(bot.db)
+    print(bot.db, flush=True)
 
     # load emoji list
     with open('utils/emoji-compact.json', encoding='utf-8') as emojson:

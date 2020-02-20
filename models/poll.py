@@ -1327,6 +1327,8 @@ class Poll:
 
                 poll_participants_detail[v.choice].append(v.user_id)
 
+            # print(poll_participants_detail, flush=True)
+
             # display options
             for i, r in enumerate(self.options_reaction):
                 custom_icon = ''
