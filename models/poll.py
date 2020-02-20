@@ -1317,6 +1317,16 @@ class Poll:
                     head += f'(With up to {self.multiple_choice} choices):'
             # embed = self.add_field_custom(name='**Options**', value=text, embed=embed)
             options_text = '**' + head + '**\n'
+
+            # Create a dict with the id of the participants for each vote.
+            await self.load_full_votes()
+            poll_participants_detail = {}
+            for v in self.full_votes:
+                if v.choice not in poll_participants_detail:
+                    poll_participants_detail[v.choice] = []
+
+                poll_participants_detail[v.choice].append(v.user_id)
+
             # display options
             for i, r in enumerate(self.options_reaction):
                 custom_icon = ''
@@ -1329,7 +1339,22 @@ class Poll:
                 if self.hide_count and self.open:
                     options_text += '\n'
                 else:
-                    options_text += f' **- {self.vote_counts_weighted.get(i, 0)} Votes**\n'
+                    if i in poll_participants_detail and len(poll_participants_detail[i]) > 0:
+                        channel = self.channel
+
+                        participants = []
+
+                        if isinstance(channel, discord.TextChannel):
+                            server = channel.guild
+
+                            for user_id in poll_participants_detail[i]:
+                                user = server.get_member(int(user_id))
+                                participants.append(user.name)
+
+                        options_text += f' **- {", ".join(participants)}**\n'
+                    else:
+                        options_text += '\n'
+
                 # embed = self.add_field_custom(
                 #     name=f':regional_indicator_{ascii_lowercase[i]}:{custom_icon} {self.count_votes(i)}',
                 #     value=r,

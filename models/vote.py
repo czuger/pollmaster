@@ -92,4 +92,6 @@ class Vote:
         if self._id:
             self.bot.db.votes.delete_one({'_id': self._id})
 
+    def __str__(self):
+        return f'{self._id}, poll_id={self.poll_id}, user_id={self.user_id}, choice={self.choice}, answer={self.answer}'
 
