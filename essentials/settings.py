@@ -13,7 +13,7 @@ class Settings:
         self.msg_errors = False
         self.log_errors = True
         self.invite_link = \
-            'https://discordapp.com/api/oauth2/authorize?client_id=444831720659877889&permissions=126016&scope=bot'
+            "https://discordapp.com/api/oauth2/authorize?client_id=679641115896447195&permissions=126016&scope=bot"
 
         self.load_secrets()
 

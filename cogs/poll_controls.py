@@ -656,15 +656,15 @@ class PollControls(commands.Cog):
 
         # Permission Check
         member = server.get_member(ctx.message.author.id)
-        if not member.guild_permissions.manage_guild:
-            result = await self.bot.db.config.find_one({'_id': str(server.id)})
-            if result and result.get('admin_role') not in [r.name for r in member.roles] and result.get(
-                    'user_role') not in [r.name for r in member.roles]:
-                await ctx.message.author.send('You don\'t have sufficient rights to start new polls on this server. '
-                                              'A server administrator has to assign the user or admin role to you. '
-                                              f'To view and set the permissions, an admin can use `{pre}userrole` and '
-                                              f'`{pre}adminrole`')
-                return
+        # if not member.guild_permissions.manage_guild:
+        #     result = await self.bot.db.config.find_one({'_id': str(server.id)})
+        #     if result and result.get('admin_role') not in [r.name for r in member.roles] and result.get(
+        #             'user_role') not in [r.name for r in member.roles]:
+        #         await ctx.message.author.send('You don\'t have sufficient rights to start new polls on this server. '
+        #                                       'A server administrator has to assign the user or admin role to you. '
+        #                                       f'To view and set the permissions, an admin can use `{pre}userrole` and '
+        #                                       f'`{pre}adminrole`')
+        #         return
 
         # Create object
         poll = Poll(self.bot, ctx, server, channel)
