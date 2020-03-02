@@ -439,6 +439,7 @@ class PollControls(commands.Cog):
             return
 
         pprint.pprint(polls)
+        await self.show(ctx, short=short)
 
     @commands.command()
     async def draw(self, ctx, short=None, opt=None):
