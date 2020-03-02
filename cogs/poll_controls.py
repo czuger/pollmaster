@@ -4,6 +4,7 @@ import logging
 import random
 import shlex
 import time
+import pprint
 
 import discord
 import pytz
@@ -401,6 +402,45 @@ class PollControls(commands.Cog):
                 await self.say_error(ctx, error, footer)
 
     @commands.command()
+    async def db(self, ctx, *, cmd=None):
+        """Start the poll wizard to create a new poll step by step. Parameters: <Question> (optional)"""
+        server = await ask_for_server(self.bot, ctx.message)
+        if not server:
+            return
+
+        result = await self.bot.db.list_collection_names()
+        print(result)
+
+        for c in self.bot.db_sync_client.pollmaster.config.find():
+            print(c)
+
+        for c in self.bot.db_sync_client.pollmaster.polls.find():
+            print(c)
+
+        for c in self.bot.db_sync_client.pollmaster.votes.find():
+            print(c)
+
+    @commands.command()
+    async def refresh(self, ctx, short=None, cmd=None):
+        """Clear all votes, then show the poll"""
+        server = await ask_for_server(self.bot, ctx.message)
+        if not server:
+            return
+
+        print(short)
+
+        query = self.bot.db.polls.find({'server_id': str(server.id), 'short': short})
+        # query = self.bot.db.polls.find({'name': short})
+
+        if query is not None:
+            # sort by newest first
+            polls = [poll async for poll in query.sort('_id', -1)]
+        else:
+            return
+
+        pprint.pprint(polls)
+
+    @commands.command()
     async def draw(self, ctx, short=None, opt=None):
         server = await ask_for_server(self.bot, ctx.message, short)
         if not server:
@@ -622,27 +662,6 @@ class PollControls(commands.Cog):
         poll = await self.wizard(ctx, route, server)
         if poll:
             await poll.post_embed(poll.channel)
-
-    @commands.command()
-    async def db(self, ctx, *, cmd=None):
-        """Start the poll wizard to create a new poll step by step. Parameters: <Question> (optional)"""
-        server = await ask_for_server(self.bot, ctx.message)
-        if not server:
-            return
-
-        result = await self.bot.db.list_collection_names()
-        print(result)
-
-        for c in self.bot.db_sync_client.pollmaster.config.find():
-            print(c)
-
-        for c in self.bot.db_sync_client.pollmaster.polls.find():
-            print(c)
-
-        for c in self.bot.db_sync_client.pollmaster.votes.find():
-            print(c)
-
-
 
     @commands.command()
     async def new(self, ctx, *, cmd=None):

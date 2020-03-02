@@ -41,6 +41,15 @@ Here is how Pollmaster looks in action:
 | @mention prefix        | Show the prefix if you forgot it                   |
 | pm!userrole <any role> | Set the role that has the rights to use the bot    |
 
+## Examples
+
+```
+# Create a standard poll
+pm!cmd -q "A quoi voulez vous jouer mercredi ?"  -o "ADG, Bolt, Frostgrave, Khârn-ages, Saga, Autres, Absent" -l "mercredi" -mc "7"
+
+pm!refresh <label>
+```
+
 ## Getting Started
 
 Users with the server permission "Manage Server" will have all rights from the start, meaning you can get started with pm!new right away!
