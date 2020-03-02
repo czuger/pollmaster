@@ -1252,9 +1252,9 @@ class Poll:
         """Generate Discord Report"""
         self.cursor_pos = 0
         embed = discord.Embed(title='', colour=SETTINGS.color)  # f'Status: {"Open" if self.is_open() else "Closed"}'
-        embed.set_author(name=f' >> {self.short} ',
-                         icon_url=SETTINGS.author_icon)
-        embed.set_thumbnail(url=SETTINGS.report_icon)
+        embed.set_author(name=f'{self.name} ', icon_url=SETTINGS.author_icon)
+        embed.set_author(name=f'{self.name}')
+        # embed.set_thumbnail(url=SETTINGS.report_icon)
 
         # ## adding fields with custom, length sensitive function
         if not await self.is_active():
@@ -1264,7 +1264,8 @@ class Poll:
                                                 embed=embed
                                                 )
 
-        embed = self.add_field_custom(name='**Poll Question**', value=self.name, embed=embed)
+        # embed = self.add_field_custom(name='**Poll Question**', value=self.name, embed=embed)
+        # embed = self.add_field_custom(name='**Question**', value='**' + self.name + '**', embed=embed)
 
         if self.roles != ['@everyone']:
             embed = self.add_field_custom(name='**Roles**', value=', '.join(self.roles), embed=embed)
@@ -1274,7 +1275,7 @@ class Poll:
                     weights.append(f'{r}: {n}')
                 embed = self.add_field_custom(name='**Weights**', value=', '.join(weights), embed=embed)
 
-        embed = self.add_field_custom(name='**Anonymous**', value=self.anonymous, embed=embed)
+        # embed = self.add_field_custom(name='**Anonymous**', value=self.anonymous, embed=embed)
 
         if self.duration != 0:
             embed = self.add_field_custom(name='**Deadline**', value=await self.get_poll_status(), embed=embed)
@@ -1316,7 +1317,8 @@ class Poll:
                 else:
                     head += f'(With up to {self.multiple_choice} choices):'
             # embed = self.add_field_custom(name='**Options**', value=text, embed=embed)
-            options_text = '**' + head + '**\n'
+            # options_text = '**' + head + '**\n'
+            options_text = ''
 
             # Create a dict with the id of the participants for each vote.
             await self.load_full_votes()
@@ -1357,6 +1359,9 @@ class Poll:
                     else:
                         options_text += '\n'
 
+                custom_icon = ''
+                # options_text = ''
+
                 # embed = self.add_field_custom(
                 #     name=f':regional_indicator_{ascii_lowercase[i]}:{custom_icon} {self.count_votes(i)}',
                 #     value=r,
@@ -1367,7 +1372,7 @@ class Poll:
         custom_text = ""
         if len(self.survey_flags) > 0:
             custom_text = " 🖊 next to an option means you can submit a custom answer."
-        embed.set_footer(text='React with ❔ to get info. It is not a vote option.' + custom_text)
+        # embed.set_footer(text='React with ❔ to get info. It is not a vote option.' + custom_text)
         return embed
 
     async def post_embed(self, destination):
