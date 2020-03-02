@@ -1381,7 +1381,7 @@ class Poll:
             if self.options_reaction_default:
                 for r in self.options_reaction:
                     await msg.add_reaction(r)
-                await msg.add_reaction('❔')
+                # await msg.add_reaction('❔')
                 return msg
             else:
                 for i, r in enumerate(self.options_reaction):
@@ -1389,10 +1389,11 @@ class Poll:
                         await msg.add_reaction(r)
                     else:
                         await msg.add_reaction(AZ_EMOJIS[i])
-                await msg.add_reaction('❔')
+                        # pass
+                # await msg.add_reaction('❔')
                 return msg
         elif not await self.is_open():
-            await msg.add_reaction('❔')
+            # await msg.add_reaction('❔')
             await msg.add_reaction('📎')
         else:
             return msg
