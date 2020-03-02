@@ -624,6 +624,27 @@ class PollControls(commands.Cog):
             await poll.post_embed(poll.channel)
 
     @commands.command()
+    async def db(self, ctx, *, cmd=None):
+        """Start the poll wizard to create a new poll step by step. Parameters: <Question> (optional)"""
+        server = await ask_for_server(self.bot, ctx.message)
+        if not server:
+            return
+
+        result = await self.bot.db.list_collection_names()
+        print(result)
+
+        for c in self.bot.db_sync_client.pollmaster.config.find():
+            print(c)
+
+        for c in self.bot.db_sync_client.pollmaster.polls.find():
+            print(c)
+
+        for c in self.bot.db_sync_client.pollmaster.votes.find():
+            print(c)
+
+
+
+    @commands.command()
     async def new(self, ctx, *, cmd=None):
         """Start the poll wizard to create a new poll step by step. Parameters: <Question> (optional)"""
         server = await ask_for_server(self.bot, ctx.message)

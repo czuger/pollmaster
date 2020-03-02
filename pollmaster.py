@@ -10,6 +10,7 @@ import datetime
 from essentials.messagecache import MessageCache
 from discord.ext import commands
 from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo import MongoClient
 
 from essentials.multi_server import get_pre
 from essentials.settings import SETTINGS
@@ -64,6 +65,9 @@ async def on_ready():
     bot.session = aiohttp.ClientSession()
     print(bot.db, flush=True)
 
+    bot.db_sync_client = MongoClient(SETTINGS.mongo_db)
+    print(bot.db_sync_client)
+
     # load emoji list
     with open('utils/emoji-compact.json', encoding='utf-8') as emojson:
         bot.emoji_dict = json.load(emojson)
@@ -71,7 +75,9 @@ async def on_ready():
     # check discord server configs
     try:
         db_server_ids = [entry['_id'] async for entry in bot.db.config.find({}, {})]
+        print(db_server_ids)
         for server in bot.guilds:
+            print(server)
             if str(server.id) not in db_server_ids:
                 # create new config entry
                 await bot.db.config.update_one(
@@ -143,5 +149,9 @@ async def on_guild_join(server):
             upsert=True
         )
         bot.pre[str(server.id)] = 'pm!'
+
+# config = bot.db.config
+# for c in config:
+#     print(c)
 
 bot.run(SETTINGS.bot_token)
