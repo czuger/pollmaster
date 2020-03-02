@@ -1252,8 +1252,8 @@ class Poll:
         """Generate Discord Report"""
         self.cursor_pos = 0
         embed = discord.Embed(title='', colour=SETTINGS.color)  # f'Status: {"Open" if self.is_open() else "Closed"}'
-        embed.set_author(name=f'{self.name} ', icon_url=SETTINGS.author_icon)
-        embed.set_author(name=f'{self.name}')
+        # embed.set_author(name=f'{self.name} ', icon_url=SETTINGS.author_icon)
+        embed.set_author(name=f' >> {self.short}')
         # embed.set_thumbnail(url=SETTINGS.report_icon)
 
         # ## adding fields with custom, length sensitive function
@@ -1265,7 +1265,7 @@ class Poll:
                                                 )
 
         # embed = self.add_field_custom(name='**Poll Question**', value=self.name, embed=embed)
-        # embed = self.add_field_custom(name='**Question**', value='**' + self.name + '**', embed=embed)
+        embed = self.add_field_custom(name='Question', value='**' + self.name + '**', embed=embed)
 
         if self.roles != ['@everyone']:
             embed = self.add_field_custom(name='**Roles**', value=', '.join(self.roles), embed=embed)
@@ -1329,7 +1329,7 @@ class Poll:
 
                 poll_participants_detail[v.choice].append(v.user_id)
 
-            # print(poll_participants_detail, flush=True)
+            print(poll_participants_detail, flush=True)
 
             # display options
             for i, r in enumerate(self.options_reaction):
@@ -1359,7 +1359,7 @@ class Poll:
                     else:
                         options_text += '\n'
 
-                custom_icon = ''
+                # custom_icon = ''
                 # options_text = ''
 
                 # embed = self.add_field_custom(

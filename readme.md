@@ -49,6 +49,10 @@ pm!cmd -q "A quoi voulez vous jouer mercredi ?"  -o "ADG, Bolt, Frostgrave, Khâ
 
 # Restart a poll
 pm!restart <label>
+
+# Show the poll again without clearing people
+pm!show <label>
+
 ```
 
 ## Getting Started

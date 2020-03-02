@@ -129,6 +129,7 @@ class PollControls(commands.Cog):
     @staticmethod
     def get_label(message: discord.Message):
         label = None
+        print(message)
         if message and message.embeds:
             embed = message.embeds[0]
             label_object = embed.author
@@ -795,6 +796,8 @@ class PollControls(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, data):
+        print(data)
+
         # dont look at bot's own reactions
         user_id = data.user_id
         if user_id == self.bot.user.id:
@@ -802,6 +805,7 @@ class PollControls(commands.Cog):
 
         # get emoji symbol
         emoji = data.emoji
+        print(emoji)
         # if emoji:
         #     emoji_name = emoji.name
         if not emoji:
@@ -811,8 +815,10 @@ class PollControls(commands.Cog):
         message_id = data.message_id
         channel_id = data.channel_id
         channel = self.bot.get_channel(channel_id)
+        print(message_id, channel_id, channel)
 
         if isinstance(channel, discord.TextChannel):
+            print('discord.TextChannel')
             server = channel.guild
             user = server.get_member(user_id)
             message = self.bot.message_cache.get(message_id)
@@ -820,9 +826,11 @@ class PollControls(commands.Cog):
                 message = await channel.fetch_message(id=message_id)
                 self.bot.message_cache.put(message_id, message)
             label = self.get_label(message)
+            print(label)
             if not label:
                 return
         elif isinstance(channel, discord.DMChannel):
+            print('discord.DMChannel')
             user = await self.bot.fetch_user(user_id)  # only do this once
             message = self.bot.message_cache.get(message_id)
             if message is None:
@@ -833,6 +841,7 @@ class PollControls(commands.Cog):
                 return
             server = await ask_for_server(self.bot, message, label)
         elif not channel:
+            print('not channel')
             # discord rapidly closes dm channels by design
             # put private channels back into the bots cache and try again
             user = await self.bot.fetch_user(user_id)  # only do this once
@@ -849,7 +858,9 @@ class PollControls(commands.Cog):
         else:
             return
 
+        print('channel check ok')
         p = await Poll.load_from_db(self.bot, server.id, label)
+        print(p)
         if not isinstance(p, Poll):
             return
 
