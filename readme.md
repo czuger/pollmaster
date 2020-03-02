@@ -47,7 +47,8 @@ Here is how Pollmaster looks in action:
 # Create a standard poll
 pm!cmd -q "A quoi voulez vous jouer mercredi ?"  -o "ADG, Bolt, Frostgrave, Khârn-ages, Saga, Autres, Absent" -l "mercredi" -mc "7"
 
-pm!refresh <label>
+# Restart a poll
+pm!restart <label>
 ```
 
 ## Getting Started

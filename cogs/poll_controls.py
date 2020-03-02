@@ -20,6 +20,8 @@ from utils.misc import CustomFormatter
 from utils.paginator import embed_list_paginated
 from utils.poll_name_generator import generate_word
 
+from pymongo import DeleteMany
+
 # A-Z Emojis for Discord
 AZ_EMOJIS = [(b'\\U0001f1a'.replace(b'a', bytes(hex(224 + (6 + i))[2:], "utf-8"))).decode("unicode-escape") for i in
              range(26)]
@@ -421,24 +423,26 @@ class PollControls(commands.Cog):
             print(c)
 
     @commands.command()
-    async def refresh(self, ctx, short=None, cmd=None):
+    async def restart(self, ctx, short=None, cmd=None):
         """Clear all votes, then show the poll"""
         server = await ask_for_server(self.bot, ctx.message)
         if not server:
             return
 
-        print(short)
+        # print(short)
 
         query = self.bot.db.polls.find({'server_id': str(server.id), 'short': short})
-        # query = self.bot.db.polls.find({'name': short})
 
-        if query is not None:
-            # sort by newest first
-            polls = [poll async for poll in query.sort('_id', -1)]
-        else:
-            return
+        polls = [poll async for poll in query.sort('_id', -1)]
 
-        pprint.pprint(polls)
+        poll = polls[0]
+        # print(poll)
+
+        poll_delete_request = [DeleteMany({'poll_id': poll['_id']})]
+        result = await self.bot.db.votes.bulk_write(poll_delete_request)
+
+        # print(result.deleted_count)
+
         await self.show(ctx, short=short)
 
     @commands.command()
