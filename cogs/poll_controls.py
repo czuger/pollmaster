@@ -16,6 +16,7 @@ from essentials.exceptions import StopWizard
 from essentials.multi_server import get_server_pre, ask_for_server, ask_for_channel
 from essentials.settings import SETTINGS
 from models.poll import Poll
+from models.vote_stat import VotesStats
 from utils.misc import CustomFormatter
 from utils.paginator import embed_list_paginated
 from utils.poll_name_generator import generate_word
@@ -1009,7 +1010,11 @@ class PollControls(commands.Cog):
 
         # order here is crucial since we can't determine if a reaction was removed by the bot or user
         # update database with vote
-        await p.vote(member, emoji.name, message)
+        vote = await p.vote(member, emoji.name, message, channel)
+
+        votes_stats = VotesStats(vote.poll_id, vote.user_id, vote.choice)
+        await votes_stats.save_to_db(self.bot, channel)
+
 
 
 def setup(bot):

@@ -1479,7 +1479,7 @@ class Poll:
         else:
             return 'Poll is closed.'
 
-    async def vote(self, user, option, message):
+    async def vote(self, user, option, message, channel):
         if not await self.is_open():
             # refresh to show closed poll
             await self.refresh(message, force=True)
@@ -1563,8 +1563,11 @@ class Poll:
         # commit
         vote = Vote(self.bot, self.id, user.id, choice, weight, answer)
         await vote.save_to_db()
+
         if not self.hide_count:
             await self.refresh(message)
+
+        return vote
 
     async def unvote(self, user, option, message):
         if not await self.is_open():

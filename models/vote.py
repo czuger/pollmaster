@@ -1,4 +1,5 @@
 from bson import ObjectId
+from .vote_stat import VotesStats
 
 
 class Vote:
