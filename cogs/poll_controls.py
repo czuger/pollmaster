@@ -1011,9 +1011,7 @@ class PollControls(commands.Cog):
         # order here is crucial since we can't determine if a reaction was removed by the bot or user
         # update database with vote
         vote = await p.vote(member, emoji.name, message, channel)
-
-        votes_stats = VotesStats(vote.poll_id, vote.user_id, vote.choice)
-        await votes_stats.save_to_db(self.bot, channel)
+        await VotesStats.create(self.bot, channel, vote)
 
 
 

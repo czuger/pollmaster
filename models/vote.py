@@ -1,6 +1,5 @@
 from bson import ObjectId
-from .vote_stat import VotesStats
-
+import uuid
 
 class Vote:
     def __init__(
@@ -20,6 +19,7 @@ class Vote:
         self.choice = choice
         self.weight = weight
         self.answer = answer
+        self.uuid = uuid.uuid1()
 
     @staticmethod
     async def load_from_db(bot, poll_id: ObjectId, user_id, choice: int):
@@ -79,7 +79,8 @@ class Vote:
             'user_id': self.user_id,
             'choice': self.choice,
             'weight': self.weight,
-            'answer': self.answer
+            'answer': self.answer,
+            'uuid': self.uuid
         })
 
     async def save_to_db(self):

@@ -1,34 +1,25 @@
-from bson import ObjectId
 from datetime import datetime
 
+
 class VotesStats:
-    def __init__(
-            self,
-            poll_id,
-            user_id,
-            choice: int
-    ):
-        self.poll_id = poll_id
-        self.user_id = str(user_id)
-        self.choice = choice
 
-    async def save_to_db(self, bot, channel):
+    @classmethod
+    async def create(cls, bot, channel, vote):
 
-        print(self.poll_id)
-        poll = await bot.db.polls.find_one({'_id': self.poll_id})
+        poll = await bot.db.polls.find_one({'_id': vote.poll_id})
         print(poll)
 
         poll_name = poll['name']
         poll_short = poll['short']
-        choice = poll['options_reaction'][self.choice]
+        choice = poll['options_reaction'][vote.choice]
 
-        member = channel.guild.get_member(int(self.user_id))
+        member = channel.guild.get_member(int(vote.user_id))
         if member.nick:
             member_name = member.nick
         else:
             member_name = member.name
 
-        result = await bot.db.vote_stats.insert_one(
+        await bot.db.vote_stats.insert_one(
             {'poll_name': poll_name, 'poll_short': poll_short, 'choice': choice,
-             'participant': member_name, 'created_at': datetime.now()}
+             'participant': member_name, 'created_at': datetime.now(), 'vote_uuid': vote.uuid}
         )
