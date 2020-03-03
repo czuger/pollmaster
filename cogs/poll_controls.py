@@ -1014,7 +1014,6 @@ class PollControls(commands.Cog):
         await VotesStats.create(self.bot, channel, vote)
 
 
-
 def setup(bot):
     global logger
     logger = logging.getLogger('discord')

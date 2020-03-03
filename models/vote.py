@@ -1,5 +1,7 @@
 from bson import ObjectId
 import uuid
+from .vote_stat import VotesStats
+
 
 class Vote:
     def __init__(
@@ -10,7 +12,8 @@ class Vote:
             choice: int,
             weight: int = 1,
             answer: str = '',
-            _id: ObjectId = None
+            _id: ObjectId = None,
+            db_uuid: str = None
     ):
         self._id = _id
         self.poll_id = poll_id
@@ -19,7 +22,7 @@ class Vote:
         self.choice = choice
         self.weight = weight
         self.answer = answer
-        self.uuid = uuid.uuid1()
+        self.db_uuid = db_uuid
 
     @staticmethod
     async def load_from_db(bot, poll_id: ObjectId, user_id, choice: int):
@@ -27,7 +30,10 @@ class Vote:
         query = await bot.db.votes.find_one(
             {'poll_id': poll_id, 'user_id': user_id, 'choice': choice})
         if query is not None:
-            v = Vote(bot, poll_id, user_id, choice, query['weight'], query['answer'], query['_id'])
+            db_uuid = None
+            if 'db_uuid' in query:
+                db_uuid = query['db_uuid']
+            v = Vote(bot, poll_id, user_id, choice, query['weight'], query['answer'], query['_id'], db_uuid)
             return v
         else:
             return None
@@ -80,10 +86,11 @@ class Vote:
             'choice': self.choice,
             'weight': self.weight,
             'answer': self.answer,
-            'uuid': self.uuid
+            'db_uuid': self.db_uuid
         })
 
     async def save_to_db(self):
+        self.db_uuid = str(uuid.uuid1())
         await self.bot.db.votes.update_one(
             {'poll_id': self.poll_id, 'user_id': str(self.user_id), 'choice': self.choice},
             {'$set': self.to_dict()},
@@ -93,6 +100,7 @@ class Vote:
     async def delete_from_db(self):
         if self._id:
             self.bot.db.votes.delete_one({'_id': self._id})
+            await VotesStats.delete(self.bot, self.db_uuid)
 
     def __str__(self):
         return f'{self._id}, poll_id={self.poll_id}, user_id={self.user_id}, choice={self.choice}, answer={self.answer}'

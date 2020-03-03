@@ -5,7 +5,6 @@ class VotesStats:
 
     @classmethod
     async def create(cls, bot, channel, vote):
-
         poll = await bot.db.polls.find_one({'_id': vote.poll_id})
         print(poll)
 
@@ -21,5 +20,10 @@ class VotesStats:
 
         await bot.db.vote_stats.insert_one(
             {'poll_name': poll_name, 'poll_short': poll_short, 'choice': choice,
-             'participant': member_name, 'created_at': datetime.now(), 'vote_uuid': vote.uuid}
+             'participant': member_name, 'created_at': datetime.now(), 'vote_uuid': vote.db_uuid}
         )
+
+    @classmethod
+    async def delete(cls, bot, vote_uuid):
+        print("vote_uuid to delete = ", vote_uuid)
+        await bot.db.vote_stats.delete_many({'vote_uuid': vote_uuid})
