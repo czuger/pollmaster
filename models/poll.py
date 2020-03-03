@@ -1353,7 +1353,12 @@ class Poll:
 
                             for user_id in poll_participants_detail[i]:
                                 user = server.get_member(int(user_id))
-                                participants.append(user.name)
+                                if user.nick:
+                                    participants.append(user.nick)
+                                else:
+                                    participants.append(user.name)
+
+                                # print(user)
 
                         options_text += f' **- {", ".join(participants)}**\n'
                     else:
