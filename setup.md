@@ -1,3 +1,16 @@
+# About
+
+This bot is a fork of the original poll bot. The aim of this one is to provide a boardgamers association poll.
+This poll is not designed to show which option is more liked but who want to play what game.
+
+# Bot usage
+
+## Commands
+
+- gm!new : Create a new bot
+- gm!restart <poll_name> : Reset and show again a poll
+- hm!show : show all polls 
+
 # Setting up Pollmaster
 
 ## Requirements
@@ -12,7 +25,7 @@ Execute the following commands from a terminal window:
 ```sh
 conda create --name pollmaster
 conda activate pollmaster
-git clone https://github.com/matnad/pollmaster.git
+git clone https://github.com/czuger/pollmaster.git
 cd pollmaster
 conda install pip
 ~/miniconda3/envs/pollmaster/bin/pip install -r requirements.txt
@@ -51,7 +64,7 @@ Servers verified. Bot running.
 > &permissions=1073867840
 
 - Now you will see the bot in your Discord channel
-- Try commands like pm!help and pm!new
+- Try commands like gm!help and pm!new
 
 ## Log files
 
