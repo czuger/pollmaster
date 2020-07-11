@@ -56,10 +56,3 @@ Users with the server permission "Manage Server" will have all rights from the s
 
 To grant users without "Manage Server" poll creation access to the bot, create and distribute the role *polladmin* or *polluser*. If you already have roles for these rights you can tell the bot by typing *pm!adminrole <your role>* and *pm!userrole <your role>*.
 
-
-## Need help? Want to try out Pollmaster?
-
-Join the support discord server by clicking the button on the top of the page.
-
-[![Discord Bots](https://discordbots.org/api/widget/444514223075360800.svg)](https://discordbots.org/bot/444514223075360800)
-
