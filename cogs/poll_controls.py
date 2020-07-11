@@ -4,6 +4,7 @@ import logging
 import random
 import shlex
 import time
+import _thread
 import pprint
 
 import discord
@@ -427,6 +428,22 @@ class PollControls(commands.Cog):
         # print(result.deleted_count)
 
         await self.show(ctx, short=short)
+
+    async def schedule_thread(self, ctx, short=None, cmd=None):
+        print('thread started')
+
+        while True:
+            await self.restart(ctx, short, cmd)
+            time.sleep(10)
+
+    @commands.command()
+    async def schedule(self, ctx, short=None, cmd=None):
+        """The poll will be scheduled each week"""
+        server = await ask_for_server(self.bot, ctx.message)
+        if not server:
+            return
+
+        await self.schedule_thread(ctx, short, cmd)
 
     @commands.command()
     async def draw(self, ctx, short=None, opt=None):
