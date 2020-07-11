@@ -4,7 +4,7 @@ import logging
 import random
 import shlex
 import time
-import _thread
+import asyncio
 import pprint
 
 import discord
@@ -434,7 +434,7 @@ class PollControls(commands.Cog):
 
         while True:
             await self.restart(ctx, short, cmd)
-            time.sleep(10)
+            await asyncio.sleep(3600*24*7)
 
     @commands.command()
     async def schedule(self, ctx, short=None, cmd=None):
