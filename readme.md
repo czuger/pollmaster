@@ -2,33 +2,28 @@
 
 ## Overview
 
-With Pollmaster you can very easily create and manage complex polls on your server. 
+This bot is a fork of the original poll bot. The aim of this one is to provide a boardgamers association poll.
+This poll is not designed to show which option is more liked but who want to play what game.
 
 Here is a quick list of features:
 
-- Voting works with reactions (users don't need to type anything)
-- Anonymous voting is possible!
-- Polls can be single choice, multiple choice or restricted to a specific number of choices
-- You can prepare polls in advance and schedule them to a date and time or manually activate them
-- Polls can be given a deadline or they can be open until closed manually
-- You can restrict which roles are allowed to participate
-- You can assign weights to roles to count their votes more or less
-- You can hide the current vote count to prevent sheeping
-- Polls are persistent and will be available until you delete them
-- Personalised info for each poll by reacting with ❔
-- Everything can be done in private chat with the bot to reduce spam on the server
-- Full multi-server support!
-- For advanced users: Commandline support to create a full poll in one line -> pm!cmd help
-
-## Take a look!
-
-Here is how Pollmaster looks in action:
-
-![Pollmaster in action](https://i.imgur.com/C3zqnK2.png "Poll 1")
-
-![Pollmaster in action](https://i.imgur.com/an0E3EO.png "Poll 2")
+- Create a poll to know who is want to play what game
+- Refresh your poll for the next week
+- Schedule a poll so that it is shown every week (on dev)
+- Remove a poll
+- Show all polls
 
 ## The most important commands
+
+| Command                | Effect                                             |
+|------------------------|----------------------------------------------------|
+| pm!help                | Shows an interactive help menu                     |
+| pm!cmd                 | Create a new poll                                  |
+| pm!restart <label>     | Restart a poll                                     |
+| pm!show <label>        | Show a poll                                        |
+| pm!schedule <label>    | Schedule a poll each week                          |
+
+## Old poll commands (use with care)
 
 | Command                | Effect                                             |
 |------------------------|----------------------------------------------------|
