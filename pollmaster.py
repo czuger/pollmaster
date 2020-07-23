@@ -1,11 +1,12 @@
 import json
 import sys
 import traceback
-
+import threading
 import aiohttp
 import discord
 import logging
 import datetime
+import asyncio
 
 from essentials.messagecache import MessageCache
 from discord.ext import commands
@@ -56,8 +57,23 @@ for ext in extensions:
     bot.load_extension(ext)
 
 
+async def scheduled_messages():
+    print('in thread')
+    while True:
+        await asyncio.sleep(5)
+        channel = bot.get_channel(684094530370273295)
+        await channel.send('Hello')
+
+        # TODO : will need to rewrite the show code as we only have channel and not context.
+        # but they both have a send method.
+
+
 @bot.event
 async def on_ready():
+
+    loop = asyncio.get_event_loop()
+    loop.create_task(scheduled_messages())
+
     bot.owner = await bot.fetch_user(SETTINGS.owner_id)
 
     mongo = AsyncIOMotorClient(SETTINGS.mongo_db)
@@ -155,3 +171,5 @@ async def on_guild_join(server):
 #     print(c)
 
 bot.run(SETTINGS.bot_token)
+
+print(bot)

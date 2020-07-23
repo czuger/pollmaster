@@ -363,6 +363,7 @@ class PollControls(commands.Cog):
         Parameters: "open" (default), "closed", "prepared" or <label>"""
 
         server = await ask_for_server(self.bot, ctx.message, short)
+
         if not server:
             return
 
@@ -413,19 +414,12 @@ class PollControls(commands.Cog):
         if not server:
             return
 
-        # print(short)
-
         query = self.bot.db.polls.find({'server_id': str(server.id), 'short': short})
-
         polls = [poll async for poll in query.sort('_id', -1)]
-
         poll = polls[0]
-        # print(poll)
 
         poll_delete_request = [DeleteMany({'poll_id': poll['_id']})]
         result = await self.bot.db.votes.bulk_write(poll_delete_request)
-
-        # print(result.deleted_count)
 
         await self.show(ctx, short=short)
 
