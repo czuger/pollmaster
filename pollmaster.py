@@ -71,8 +71,8 @@ async def scheduled_messages():
 @bot.event
 async def on_ready():
 
-    loop = asyncio.get_event_loop()
-    loop.create_task(scheduled_messages())
+    # loop = asyncio.get_event_loop()
+    # loop.create_task(scheduled_messages())
 
     bot.owner = await bot.fetch_user(SETTINGS.owner_id)
 
