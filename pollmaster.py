@@ -12,6 +12,7 @@ from essentials.messagecache import MessageCache
 from discord.ext import commands
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import MongoClient
+from models.vote_stat import VotesStats
 
 from essentials.multi_server import get_pre
 from essentials.settings import SETTINGS

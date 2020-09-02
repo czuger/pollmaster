@@ -1,7 +1,25 @@
 from datetime import datetime
+from collections import Counter
 
 
 class VotesStats:
+
+    @staticmethod
+    async def get_stats_dict(bot):
+        # print(await bot.db.list_collection_names())
+        # print(await bot.db.vote_stats.find_one())
+        # print(await bot.db.vote_stats.count_documents({}))
+
+        c = bot.db.vote_stats.find()
+
+        choices_list = []
+        async for e in c:
+            choices_list.append(e['choice'])
+        stats = Counter(choices_list)
+
+        print(stats)
+
+        return stats
 
     @classmethod
     async def create(cls, bot, channel, vote):

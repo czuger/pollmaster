@@ -440,6 +440,17 @@ class PollControls(commands.Cog):
         await self.schedule_thread(ctx, short, cmd)
 
     @commands.command()
+    async def stats(self, ctx, short=None, cmd=None):
+        """This will show use games"""
+        stats = await VotesStats.get_stats_dict(self.bot)
+
+        stats_messages = []
+        for k, v in stats.items():
+            stat_message = "{} : {}".format(k, v)
+            stats_messages.append(stat_message)
+        await self.say_embed(ctx, "\n".join(stats_messages))
+
+    @commands.command()
     async def draw(self, ctx, short=None, opt=None):
         server = await ask_for_server(self.bot, ctx.message, short)
         if not server:
@@ -853,11 +864,12 @@ class PollControls(commands.Cog):
 
         print('channel check ok')
         p = await Poll.load_from_db(self.bot, server.id, label)
-        print(p)
+        print(("poll = ", p))
         if not isinstance(p, Poll):
             return
 
         member = server.get_member(user_id)
+        print(("emoji = ", emoji))
 
         # export
         if emoji.name == '📎':

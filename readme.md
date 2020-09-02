@@ -22,6 +22,7 @@ Here is a quick list of features:
 | pm!restart <label>     | Restart a poll                                     |
 | pm!show <label>        | Show a poll                                        |
 | pm!schedule <label>    | Schedule a poll each week                          |
+| pm!stats               | Print the stats for past polls                     |
 
 ## Old poll commands (use with care)
 
@@ -40,7 +41,7 @@ Here is a quick list of features:
 
 ```
 # Create a standard poll
-pm!cmd -q "A quoi voulez vous jouer mercredi ?"  -o "ADG, Bolt, Frostgrave, Khârn-ages, Saga, Autres, Absent" -l "mercredi" -mc "7"
+pm!cmd -q "A quoi voulez vous jouer mercredi ?" -o "Present avec les clés, ADG, Bataille empire, Bolt, Frostgrave, Game of throne, Guildball, Khârn-ages, Malifaux, Saga ADM, Saga histo, SW Armada, Autres, Absent" -l "mercredi" -mc "5"
 
 # Restart a poll
 pm!restart <label>
@@ -48,6 +49,8 @@ pm!restart <label>
 # Show the poll again without clearing people
 pm!show <label>
 
+# Automatically restart a poll each week (at the time it has been shceduled)
+pm!schedule <label>
 ```
 
 ## Getting Started
