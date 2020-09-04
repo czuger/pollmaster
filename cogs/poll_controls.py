@@ -437,7 +437,17 @@ class PollControls(commands.Cog):
         if not server:
             return
 
-        await self.schedule_thread(ctx, short, cmd)
+        # await self.schedule_thread(ctx, short, cmd)
+
+        # print(self.bot)
+        # print(server.id)
+        # print(short)
+
+        p = await Poll.load_from_db(self.bot, server.id, short)
+        await p.schedule_time({'weekday': 4, 'hour': 6})
+        # print('poll')
+        # print(p)
+
 
     @commands.command()
     async def stats(self, ctx, short=None, cmd=None):

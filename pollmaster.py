@@ -58,23 +58,24 @@ for ext in extensions:
     bot.load_extension(ext)
 
 
-async def scheduled_messages():
-    print('in thread')
+async def scheduled_polls_loop():
+    print('In scheduled_polls_loop')
     while True:
-        await asyncio.sleep(5)
-        channel = bot.get_channel(684094530370273295)
-        await channel.send('Hello')
+        # print("After await")
+        # channel = bot.get_channel(684094530370273295)
+        # await channel.send('Hello')
 
         # TODO : will need to rewrite the show code as we only have channel and not context.
         # but they both have a send method.
 
+        async for poll in bot.db.polls.find({"scheduled_time": {"$exists": True}}):
+            print(poll)
+
+        await asyncio.sleep(10)
+
 
 @bot.event
 async def on_ready():
-
-    # loop = asyncio.get_event_loop()
-    # loop.create_task(scheduled_messages())
-
     bot.owner = await bot.fetch_user(SETTINGS.owner_id)
 
     mongo = AsyncIOMotorClient(SETTINGS.mongo_db)
@@ -109,6 +110,14 @@ async def on_ready():
     bot.pre = {entry['_id']: entry['prefix'] async for entry in bot.db.config.find({}, {'_id', 'prefix'})}
 
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="pm!help"))
+
+    # print(await bot.db.polls.count_documents({}))
+    #
+    # async for poll in bot.db.polls.find({}):
+    #     print(poll)
+
+    loop = asyncio.get_event_loop()
+    loop.create_task(scheduled_polls_loop())
 
     print("Servers verified. Bot running.")
 

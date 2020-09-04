@@ -89,6 +89,7 @@ class Poll:
             self.votes = {}
 
             self.wizard_messages = []
+            self.scheduled_time = None
 
     @staticmethod
     def get_preset_options(number):
@@ -942,7 +943,8 @@ class Poll:
             'active': self.active,
             'activation': self.activation,
             'activation_tz': self.activation_tz,
-            'votes': self.votes
+            'votes': self.votes,
+            'scheduled_time': self.scheduled_time
         }
 
     async def to_export(self):
@@ -1616,3 +1618,7 @@ class Poll:
             await message.edit(embed=await self.generate_embed())
         else:
             self.bot.loop.create_task(message.edit(embed=await self.generate_embed()))
+
+    async def schedule_time(self, new_time_struct):
+        self.scheduled_time = new_time_struct
+        await self.save_to_db()
