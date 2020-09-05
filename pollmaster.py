@@ -85,6 +85,11 @@ async def scheduled_polls_loop():
 
             if cur_weekday == sched_weekday and cur_hour == sched_hour:
                 print('Poll should be launched')
+                print(poll)
+
+                channel = bot.get_channel(int(poll['channel_id']))
+                print(channel)
+                await channel.send('Hello')
 
         # Just change this to hour.
         await asyncio.sleep(10)

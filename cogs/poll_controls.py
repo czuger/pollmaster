@@ -362,6 +362,7 @@ class PollControls(commands.Cog):
         """Show a list of open polls or show a specific poll.
         Parameters: "open" (default), "closed", "prepared" or <label>"""
 
+        print(ctx)
         server = await ask_for_server(self.bot, ctx.message, short)
 
         if not server:
