@@ -431,22 +431,14 @@ class PollControls(commands.Cog):
             await asyncio.sleep(3600*24*7)
 
     @commands.command()
-    async def schedule(self, ctx, short=None, cmd=None):
+    async def schedule(self, ctx, short=None, day=None, hour=None):
         """The poll will be scheduled each week"""
         server = await ask_for_server(self.bot, ctx.message)
         if not server:
             return
 
-        # await self.schedule_thread(ctx, short, cmd)
-
-        # print(self.bot)
-        # print(server.id)
-        # print(short)
-
         p = await Poll.load_from_db(self.bot, server.id, short)
-        await p.schedule_time({'weekday': 4, 'hour': 6})
-        # print('poll')
-        # print(p)
+        await p.schedule_time({'weekday': day, 'hour': hour})
 
 
     @commands.command()

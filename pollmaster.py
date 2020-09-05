@@ -68,9 +68,25 @@ async def scheduled_polls_loop():
         # TODO : will need to rewrite the show code as we only have channel and not context.
         # but they both have a send method.
 
-        async for poll in bot.db.polls.find({"scheduled_time": {"$exists": True}}):
-            print(poll)
+        now = datetime.datetime.now()
 
+        cur_weekday = now.weekday()
+        cur_hour = now.hour
+
+        print(cur_weekday, cur_hour)
+
+        async for poll in bot.db.polls.find({"scheduled_time": {"$exists": True}}):
+            print(poll['scheduled_time'])
+
+            sched_weekday = int(poll['scheduled_time']['weekday'])
+            sched_hour = int(poll['scheduled_time']['hour'])
+
+            print(sched_weekday, sched_hour)
+
+            if cur_weekday == sched_weekday and cur_hour == sched_hour:
+                print('Poll should be launched')
+
+        # Just change this to hour.
         await asyncio.sleep(10)
 
 
