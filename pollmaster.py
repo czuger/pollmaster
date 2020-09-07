@@ -74,33 +74,29 @@ async def scheduled_polls_loop():
         cur_weekday = now.weekday()
         cur_hour = now.hour
 
-        # print(cur_weekday, cur_hour)
+        print("cur_weekday={}, cur_hour={}".format(cur_weekday, cur_hour))
 
         async for poll in bot.db.polls.find({"scheduled_time": {"$exists": True}}):
-            # print(poll['scheduled_time'])
+            print("poll['scheduled_time']={}".format(poll['scheduled_time']))
 
             sched_weekday = int(poll['scheduled_time']['weekday'])
             sched_hour = int(poll['scheduled_time']['hour'])
 
-            # print(sched_weekday, sched_hour)
+            print("sched_weekday={}, sched_hour={}".format(sched_weekday, sched_hour))
 
             if cur_weekday == sched_weekday and cur_hour == sched_hour:
-                # print('Poll should be launched')
-                # print(poll)
+                print('Poll should be launched')
+                print(poll)
 
                 channel = bot.get_channel(int(poll['channel_id']))
-                # print(channel)
+                print("channel")
+                print(channel)
                 await channel.send('Hello')
 
                 p = await Poll.load_from_db(bot, poll['server_id'], poll['short'])
                 await p.post_embed(channel)
+                print("Poll posted")
 
-                # async with channel.typing() as ctx:
-                    # do expensive stuff here
-                    # ctx.invoke(bot.get_command('show'), query='mercredi')
-                    # await channel.send('done!')
-
-        # Just change this to hour.
         await asyncio.sleep(3600)
 
 
