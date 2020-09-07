@@ -25,6 +25,8 @@ from essentials.settings import SETTINGS
 from models.vote import Vote
 from utils.misc import possible_timezones
 
+from pymongo import DeleteMany
+
 logger = logging.getLogger('discord')
 
 # Helvetica is the closest font to Whitney (discord uses Whitney) in afm
@@ -1622,3 +1624,7 @@ class Poll:
     async def schedule_time(self, new_time_struct):
         self.scheduled_time = new_time_struct
         await self.save_to_db()
+
+    async def clear_votes(self):
+        poll_delete_request = [DeleteMany({'poll_id': self.id})]
+        result = await self.bot.db.votes.bulk_write(poll_delete_request)

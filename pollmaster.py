@@ -62,7 +62,7 @@ for ext in extensions:
 async def scheduled_polls_loop():
     print('In scheduled_polls_loop')
     while True:
-        await asyncio.sleep(3600)
+        await asyncio.sleep(10)
 
         now = datetime.datetime.now()
 
@@ -89,6 +89,8 @@ async def scheduled_polls_loop():
                 await channel.send('Hello')
 
                 p = await Poll.load_from_db(bot, poll['server_id'], poll['short'])
+                await p.clear_votes()
+
                 await p.post_embed(channel)
                 print("Poll posted")
 

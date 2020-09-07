@@ -22,8 +22,6 @@ from utils.misc import CustomFormatter
 from utils.paginator import embed_list_paginated
 from utils.poll_name_generator import generate_word
 
-from pymongo import DeleteMany
-
 # A-Z Emojis for Discord
 AZ_EMOJIS = [(b'\\U0001f1a'.replace(b'a', bytes(hex(224 + (6 + i))[2:], "utf-8"))).decode("unicode-escape") for i in
              range(26)]
@@ -415,21 +413,10 @@ class PollControls(commands.Cog):
         if not server:
             return
 
-        query = self.bot.db.polls.find({'server_id': str(server.id), 'short': short})
-        polls = [poll async for poll in query.sort('_id', -1)]
-        poll = polls[0]
-
-        poll_delete_request = [DeleteMany({'poll_id': poll['_id']})]
-        result = await self.bot.db.votes.bulk_write(poll_delete_request)
+        poll = await Poll.load_from_db(server.id, short)
+        await poll.clear_votes()
 
         await self.show(ctx, short=short)
-
-    async def schedule_thread(self, ctx, short=None, cmd=None):
-        print('thread started')
-
-        while True:
-            await self.restart(ctx, short, cmd)
-            await asyncio.sleep(3600*24*7)
 
     @commands.command()
     async def schedule(self, ctx, short=None, day=None, hour=None):
@@ -440,7 +427,6 @@ class PollControls(commands.Cog):
 
         p = await Poll.load_from_db(self.bot, server.id, short)
         await p.schedule_time({'weekday': day, 'hour': hour})
-
 
     @commands.command()
     async def stats(self, ctx, short=None, cmd=None):
