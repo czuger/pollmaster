@@ -62,12 +62,7 @@ for ext in extensions:
 async def scheduled_polls_loop():
     print('In scheduled_polls_loop')
     while True:
-        # print("After await")
-        # channel = bot.get_channel(684094530370273295)
-        # await channel.send('Hello')
-
-        # TODO : will need to rewrite the show code as we only have channel and not context.
-        # but they both have a send method.
+        await asyncio.sleep(3600)
 
         now = datetime.datetime.now()
 
@@ -96,8 +91,6 @@ async def scheduled_polls_loop():
                 p = await Poll.load_from_db(bot, poll['server_id'], poll['short'])
                 await p.post_embed(channel)
                 print("Poll posted")
-
-        await asyncio.sleep(3600)
 
 
 @bot.event
@@ -142,10 +135,10 @@ async def on_ready():
     # async for poll in bot.db.polls.find({}):
     #     print(poll)
 
+    print("Servers verified. Bot running.")
+
     loop = asyncio.get_event_loop()
     loop.create_task(scheduled_polls_loop())
-
-    print("Servers verified. Bot running.")
 
 
 @bot.event
