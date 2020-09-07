@@ -812,7 +812,7 @@ class PollControls(commands.Cog):
 
         # get emoji symbol
         emoji = data.emoji
-        print(emoji)
+        # print(emoji)
         # if emoji:
         #     emoji_name = emoji.name
         if not emoji:
