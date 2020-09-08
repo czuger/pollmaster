@@ -413,7 +413,7 @@ class PollControls(commands.Cog):
         if not server:
             return
 
-        poll = await Poll.load_from_db(server.id, short)
+        poll = await Poll.load_from_db(self.bot, server.id, short)
         await poll.clear_votes()
 
         await self.show(ctx, short=short)
