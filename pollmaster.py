@@ -69,6 +69,7 @@ async def scheduled_polls_loop():
         cur_weekday = now.weekday()
         cur_hour = now.hour
 
+        print("Schedule log start {}".format(now))
         print("cur_weekday={}, cur_hour={}".format(cur_weekday, cur_hour))
 
         async for poll in bot.db.polls.find({"scheduled_time": {"$exists": True}}):
@@ -93,6 +94,8 @@ async def scheduled_polls_loop():
 
                 await p.post_embed(channel)
                 print("Poll posted")
+
+        print("Schedule log end", flush=True)
 
 
 @bot.event
