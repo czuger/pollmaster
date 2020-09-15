@@ -52,8 +52,8 @@ async def show_poll(bot, poll):
 async def scheduled_polls_loop(bot):
     scheduled_logger.debug('In scheduled_polls_loop')
     while True:
-        # await asyncio.sleep(1800)
-        await asyncio.sleep(5)
+        await asyncio.sleep(1800)
+        # await asyncio.sleep(5)
 
         now = datetime.datetime.now()
 
