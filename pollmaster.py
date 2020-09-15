@@ -58,11 +58,44 @@ extensions = ['cogs.config', 'cogs.poll_controls', 'cogs.help', 'cogs.db_api', '
 for ext in extensions:
     bot.load_extension(ext)
 
+last_hour_show_key = None
+
+
+def poll_shown_this_hour(cur_weekday, cur_hour):
+    global last_hour_show_key
+
+    last_hour_key = "{}_{}".format(cur_weekday, cur_hour)
+    print("last_hour_key={}, last_hour_show_key={}".format(last_hour_key, last_hour_show_key))
+    if last_hour_key is None or last_hour_key != last_hour_show_key:
+        last_hour_show_key = last_hour_key
+        print("Poll not shown this hour")
+        return False
+
+    print("Poll shown this hour")
+    return True
+
+
+async def show_poll(poll):
+    """asyncio.sleep is not precise. We can't rely on it."""
+    print('Poll should be launched')
+    print(poll)
+
+    channel = bot.get_channel(int(poll['channel_id']))
+    print("channel")
+    print(channel)
+    await channel.send('Hello')
+
+    p = await Poll.load_from_db(bot, poll['server_id'], poll['short'])
+    await p.clear_votes()
+
+    await p.post_embed(channel)
+    print("Poll posted")
+
 
 async def scheduled_polls_loop():
     print('In scheduled_polls_loop')
     while True:
-        await asyncio.sleep(3600)
+        await asyncio.sleep(1800)
 
         now = datetime.datetime.now()
 
@@ -72,28 +105,17 @@ async def scheduled_polls_loop():
         print("Schedule log start {}".format(now))
         print("cur_weekday={}, cur_hour={}".format(cur_weekday, cur_hour))
 
-        async for poll in bot.db.polls.find({"scheduled_time": {"$exists": True}}):
-            print("poll['scheduled_time']={}".format(poll['scheduled_time']))
+        if not poll_shown_this_hour(cur_weekday, cur_hour):
+            async for poll in bot.db.polls.find({"scheduled_time": {"$exists": True}}):
+                print("poll['short']={}, poll['scheduled_time']={}".format(poll['short'], poll['scheduled_time']))
 
-            sched_weekday = int(poll['scheduled_time']['weekday'])
-            sched_hour = int(poll['scheduled_time']['hour'])
+                sched_weekday = int(poll['scheduled_time']['weekday'])
+                sched_hour = int(poll['scheduled_time']['hour'])
 
-            print("sched_weekday={}, sched_hour={}".format(sched_weekday, sched_hour))
+                print("sched_weekday={}, sched_hour={}".format(sched_weekday, sched_hour))
 
-            if cur_weekday == sched_weekday and cur_hour == sched_hour:
-                print('Poll should be launched')
-                print(poll)
-
-                channel = bot.get_channel(int(poll['channel_id']))
-                print("channel")
-                print(channel)
-                await channel.send('Hello')
-
-                p = await Poll.load_from_db(bot, poll['server_id'], poll['short'])
-                await p.clear_votes()
-
-                await p.post_embed(channel)
-                print("Poll posted")
+                if cur_weekday == sched_weekday and cur_hour == sched_hour:
+                    show_poll(poll)
 
         print("Schedule log end", flush=True)
 
