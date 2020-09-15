@@ -24,7 +24,7 @@ class VotesStats:
     @classmethod
     async def create(cls, bot, channel, vote):
         poll = await bot.db.polls.find_one({'_id': vote.poll_id})
-        print(poll)
+        print("poll={}".format(poll))
 
         poll_name = poll['name']
         poll_short = poll['short']
