@@ -98,7 +98,7 @@ async def on_ready():
     # async for poll in bot.db.polls.find({}):
     #     print(poll)
 
-    start_scheduled_polls_loop()
+    start_scheduled_polls_loop(bot)
 
     print("Servers verified. Bot running.")
 

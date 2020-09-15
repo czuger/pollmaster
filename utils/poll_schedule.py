@@ -3,9 +3,6 @@ import asyncio
 import logging
 
 from models.poll import Poll
-# Will create a circular dependency if imported.
-# resulting in an ImportError: Cannot import name X
-# from pollmaster import bot
 
 
 # logger for scheduled polls
@@ -36,7 +33,7 @@ def poll_shown_this_hour(cur_weekday, cur_hour):
     return True
 
 
-async def show_poll(poll):
+async def show_poll(bot, poll):
     """asyncio.sleep is not precise. We can't rely on it."""
     scheduled_logger.debug('Poll should be launched')
     scheduled_logger.debug("poll={}".format(poll))
@@ -52,10 +49,11 @@ async def show_poll(poll):
     scheduled_logger.debug("Poll posted")
 
 
-async def scheduled_polls_loop():
+async def scheduled_polls_loop(bot):
     scheduled_logger.debug('In scheduled_polls_loop')
     while True:
-        await asyncio.sleep(1800)
+        # await asyncio.sleep(1800)
+        await asyncio.sleep(5)
 
         now = datetime.datetime.now()
 
@@ -76,11 +74,11 @@ async def scheduled_polls_loop():
                 scheduled_logger.debug("sched_weekday={}, sched_hour={}".format(sched_weekday, sched_hour))
 
                 if cur_weekday == sched_weekday and cur_hour == sched_hour:
-                    show_poll(poll)
+                    show_poll(bot, poll)
 
         scheduled_logger.debug("Schedule log end")
 
 
-def start_scheduled_polls_loop():
+def start_scheduled_polls_loop(bot):
     loop = asyncio.get_event_loop()
-    loop.create_task(scheduled_polls_loop())
+    loop.create_task(scheduled_polls_loop(bot))
