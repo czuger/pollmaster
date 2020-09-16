@@ -19,3 +19,4 @@ export/
 backup/
 
 server_deployment.txt
+config.py

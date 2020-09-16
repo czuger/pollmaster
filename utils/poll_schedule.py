@@ -3,6 +3,7 @@ import asyncio
 import logging
 
 from models.poll import Poll
+from config import POLL_SCHEDULE_SLEEP_TIME
 
 
 # logger for scheduled polls
@@ -52,8 +53,7 @@ async def show_poll(bot, poll):
 async def scheduled_polls_loop(bot):
     scheduled_logger.debug('In scheduled_polls_loop')
     while True:
-        await asyncio.sleep(1800)
-        # await asyncio.sleep(5)
+        await asyncio.sleep(POLL_SCHEDULE_SLEEP_TIME)
 
         now = datetime.datetime.now()
 
@@ -74,7 +74,7 @@ async def scheduled_polls_loop(bot):
                 scheduled_logger.debug("sched_weekday={}, sched_hour={}".format(sched_weekday, sched_hour))
 
                 if cur_weekday == sched_weekday and cur_hour == sched_hour:
-                    show_poll(bot, poll)
+                    await show_poll(bot, poll)
 
         scheduled_logger.debug("Schedule log end")
 
